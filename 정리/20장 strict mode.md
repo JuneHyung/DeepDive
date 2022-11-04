@@ -1,6 +1,6 @@
-# 20장 strict mode
+# 🐳 20장 strict mode
 
-## 20.1 strict mode란?
+## 🌏 20.1 strict mode란?
 
 ```javascript
 function foo() {
@@ -23,7 +23,7 @@ console.log(x);
 
 
 
-## 20.2 strict mode의 적용
+## 🌏 20.2 strict mode의 적용
 
 전역의 선두 또는 함수 몸체 선두에 **`'use strict';`**를 추가.
 
@@ -51,7 +51,7 @@ foo();
 
 
 
-## 20.3 전역에 strict mode를 적용하는 것은 피하자
+## 🌏 20.3 전역에 strict mode를 적용하는 것은 피하자
 
 전역에 적용한 strict mode는 스크립트 단위로 적용된다.
 
@@ -89,7 +89,7 @@ foo();
 
 
 
-## 20.4 함수 단위로 strict mode를 적용하는 것도 피하자.
+## 🌏 20.4 함수 단위로 strict mode를 적용하는 것도 피하자.
 
 함수단위로 함수마다 사용하는것은 번거롭기도 하며, **strict mode가 적용된 함수가 참조할 함수 외부의 컨텍스트에 strict mode를 적용하지 않는다면 이 또한 문제**가 될 수 있다.
 
@@ -111,14 +111,14 @@ foo();
 
 
 
-## 20.5 strict mode가 발생시키는 에러
+## 🌏 20.5 strict mode가 발생시키는 에러
 
 * **암묵적 전역**
 * **변수, 함수, 매개변수의 삭제**
 * **매개변수 이름의 중복**
 * **with문 사용**
 
-### 20.5.1 암묵적 전역
+### 👉 20.5.1 암묵적 전역
 
 선언하지 않은 변수 참조하면 ReferenceError발생.
 
@@ -133,7 +133,7 @@ foo();
 
 
 
-### 20.5.2 변수, 함수, 매개변수의 삭제
+### 👉 20.5.2 변수, 함수, 매개변수의 삭제
 
 delete 연산자로 변수, 함수, 매개변수를 삭제 시 SyntaxError발생
 
@@ -156,7 +156,7 @@ delete 연산자로 변수, 함수, 매개변수를 삭제 시 SyntaxError발생
 
 
 
-### 20.5.3 매개변수 이름의 중복
+### 👉 20.5.3 매개변수 이름의 중복
 
 중복된 매개변수 이름 사용시 SyntaxError
 
@@ -174,7 +174,7 @@ delete 연산자로 변수, 함수, 매개변수를 삭제 시 SyntaxError발생
 
 
 
-### 20.5.4 with문의 사용.
+### 👉 20.5.4 with문의 사용.
 
 with문 사용 시 SyntaxError.
 
@@ -188,9 +188,9 @@ with문 사용 시 SyntaxError.
 
 
 
-## 20.6 strict mode 적용에 의한 변화
+## 🌏 20.6 strict mode 적용에 의한 변화
 
-### 20.6.1 일반 함수의 this
+### 👉 20.6.1 일반 함수의 this
 
 `strict mode`에서 함수를 일반 함수로서 호출하면 this에 undefined가 바인딩됨.
 
@@ -214,7 +214,7 @@ with문 사용 시 SyntaxError.
 
 
 
-### 20.6.2 arguments 객체
+### 👉 20.6.2 arguments 객체
 
 `strict mode`에서는 매개변수에 전달된 인수를 재할당하여 변경해도 arguments객체에 반영되지 않는다.
 

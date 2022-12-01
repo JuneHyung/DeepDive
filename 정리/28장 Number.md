@@ -289,7 +289,7 @@ toPrecision은 전달받은 전체 자릿수 까지 유효하도록 나머지 �
 
 
 
-### 28.3.8 Number.prototype.toSTring
+### 28.3.8 Number.prototype.toString
 
 숫자를 문자열로 변환하여 반환함.
 

@@ -1,2 +1,2 @@
-# JSDeepDive
-JavaScript Deep Dive 정독
+# DeepDive
+Deep Dive 책 읽어보기.

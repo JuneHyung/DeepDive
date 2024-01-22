@@ -1,2 +1,3 @@
 # DeepDive
-Deep Dive 책 읽어보기.
+책 읽고 정리하기
+

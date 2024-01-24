@@ -2,9 +2,17 @@
 	height: 100% !important;
 }
 
+/* @font-face {
+	font-family: BMYEONSUNG;
+	src: url('./assets/fonts/BMYEONSUNG.woff2') format('woff2'),
+	url('./assets/fonts/BMYEONSUNG.woff') format('woff'),
+	url('./assets/fonts/BMYEONSUNG.ttf') format('truetype');
+} */
 @font-face {
 	font-family: BMYEONSUNG;
-	src: url('./assets/fonts/BMYEONSUNG.ttf');
+	src: url('./assets/fonts/subset-BMYEONSUNG.woff2') format('woff2'),
+	url('./assets/fonts/subset-BMYEONSUNG.woff') format('woff'),
+	url('./assets/fonts/subset-BMYEONSUNG.ttf') format('truetype');
 }
 
 .BannerVideo {

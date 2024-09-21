@@ -214,3 +214,9 @@ const charCountState = selector({
 ```
 
 charCountState는 `useRecoilValue`를 이용해 읽을 수 있다.
+
+
+
+## 📘 참고
+
+* [공식문서 - Recoil](https://recoiljs.org/ko/)

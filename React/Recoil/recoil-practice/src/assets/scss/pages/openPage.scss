@@ -1,0 +1,30 @@
+.open-page {
+  height: 100%;
+  ul {
+    display: flex;
+    height: calc(100dvh - 32px - 40px);
+    li {
+      display: flex;
+      flex: 0 1 100px;
+      border: 1px solid $point-color;
+      padding: 1rem;
+      box-sizing: border-box;
+      margin: 4px;
+      height: 100%;
+      &:nth-child(4n + 1) {
+        margin-left: 0;
+      }
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        font-weight: 900;
+      }
+      &:hover {
+        background-color: #fff;
+        color: $point-color;
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+.layout-02 {
+  display: flex;
+  flex: 1;
+  justify-content: stretch;
+  height: 100%;
+  font-size: 2rem;
+  .layout-02-left-menu {
+    width: 60px;
+    font-size: 1rem;
+    background-color: rgb(182, 182, 182);
+    li{
+      text-align: center;
+      height:60px;
+      line-height:60px;
+      cursor:pointer;
+      &:hover{
+        background-color:rgba(255,255,255,1);
+        color:$point-color;
+      }
+    }
+  }
+  .layout-02-right-content {
+    width: 100%;
+    header {
+      display: flex;
+      height:40px;
+      font-size: 1rem;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    main {
+      display: flex;
+      border: 1px solid $point-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .box-left,
+      .box-right {
+        display: flex;
+        flex: 1;
+        height: 500px;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+      }
+      .box-left {
+        background-color: rgb(224, 49, 49);
+      }
+      .box-right {
+        background-color: rgba(50, 200, 100, 1);
+      }
+    }
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      border: 1px solid $point-color;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@import "./theme.scss";
+@import "./reset.scss";
+@import "./app.scss";
+body {
+  margin: 0;
+  font-family: "pretendard,'맑은 고딕','Malgun Gothic',돋움,Dotum,'Apple SD Gothic Neo',sans-serif";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size:14px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.start-message{
+  font-size: 0.9rem;
+}

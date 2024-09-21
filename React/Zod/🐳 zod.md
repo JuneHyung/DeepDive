@@ -283,35 +283,491 @@ const TunaOnly = FishEnum.exclude(["Salmon", "Trout"]);
 
 ### 👉 default()
 
+기본값 부여
+
+```ts
+const User = z.object({
+  email: z.string(),
+  active: z.boolean().default(false),
+});
+
+const user = User.parse({
+  email: "user@test.com",
+});
+
+console.log(user);
+/*
+{
+  email: 'user@test.com',
+  active: false
+}
+*/
+```
+
+
+
 ### 👉 optional()
+
+스키마를 옵셔널한 값으로 만듬
+
+```ts
+const schema = z.optional(z.string());
+
+schema.parse(undefined); // => undefined
+type A = z.infer<typeof schema>; // string | undefined
+```
+
+```ts
+const user = z.object({
+  username: z.string().optional(),
+});
+type C = z.infer<typeof user>; // { username?: string | undefined };
+```
+
+
 
 ### 👉 nullables()
 
+```ts
+const nullableString = z.nullable(z.string());
+nullableString.parse("asdf"); // => "asdf"
+nullableString.parse(null); // => null
+```
+
+```ts
+const E = z.string().nullable(); // equivalent to nullableString
+type E = z.infer<typeof E>; // string | null
+```
+
+
+
 ### 👉 nullish()
+
+undefined와 null 모두 허용함.
+
+```ts
+const nullishString = z.string().nullish(); // string | null | undefined
+
+// equivalent to
+z.string().nullable().optional();
+```
+
+
 
 ### 👉 transform() 
 
+입출력간 데이터를 변환
+
+```ts
+// 입력을 받을 땐 string, number 모두 가능하지만 string으로 전환
+const ID = z
+  .string()
+  .or(z.number())
+  .transform((id) => (typeof id === "number" ? String(id) : id));
+
+type ID = z.infer<typeof ID>;
+//  ^? type ID = string
+// 조금 더 복잡한 형태의 transform도 가능
+const User = z
+  .object({
+    firstName: z.string(),
+    middleName: z.string().optional(),
+    lastName: z.string(),
+  })
+  .transform((user) => ({
+    ...user,
+    fullName: user.middleName
+      ? `${user.firstName} ${user.middleName} ${user.lastName}`
+      : `${user.firstName} ${user.lastName}`,
+  }));
+```
+
+정의한 변환규칙에 따라 결과에 fullName속성이 추가될 수 있다.
+
+```ts
+onsole.log(User.parse({ firstName: "John", lastName: "Doe" }));
+//{ firstName: 'John', lastName: 'Doe', fullName: 'John Doe' }
+
+console.log(User.parse({ firstName: "John", middleName: "K.", lastName: "Doe" }))
+//{ firstName: 'John', middleName: 'K.', lastName: 'Doe', fullName: 'John K. Doe }
+```
+
+
+
 ### 👉 or()
+
+```ts
+const stringOrNumber = z.string().or(z.number()); // string | number
+
+// equivalent to
+z.union([z.string(), z.number()]);
+```
+
+
 
 ### 👉 and()
 
+```ts
+const nameAndAge = z
+  .object({ name: z.string() })
+  .and(z.object({ age: z.number() })); // { name: string } & { age: number }
+
+// equivalent to
+z.intersection(z.object({ name: z.string() }), z.object({ age: z.number() }));
+```
+
+
+
 ### 👉 refine()
+
+custom validation
+
+```ts
+const myString = z.string().refine((val) => val.length <= 255, {
+  message: "String can't be more than 255 characters",
+});
+```
+
+
+
+2개의 인수(Argument)가 필요
+
+* 첫 번째 : 유효성 검사 함수. 모든 true값은 통과함.
+* 두 번째 : 옵션. 특정 오류 처리 동작을 custom할 수 있음.
+
+```ts
+// refine 옵션의 타입
+type RefineParams = {
+  // override error message
+  message?: string;
+
+  // appended to error path
+  path?: (string | number)[];
+
+  // params object you can use to customize message
+  // in error map
+  params?: object;
+};
+
+const longString = z.string().refine(
+  (val) => val.length > 10, // 유효성 검사 함수
+  (val) => ({ message: `${val} is not more than 10 characters` }) // 옵션 설정 함수
+);
+```
+
+
+
+오류 경로 Custom
+
+```ts
+const passwordForm = z
+  .object({
+    password: z.string(),
+    confirm: z.string(),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"], // path of error
+  });
+
+passwordForm.parse({ password: "asdf", confirm: "qwer" });
+```
+
+path 파라미터를 제공했기 때문에 error가 다암처럼 제공될 것임.
+
+```ts
+ZodError {
+  issues: [{
+    "code": "custom",
+    "path": [ "confirm" ],
+    "message": "Passwords don't match"
+  }]
+}
+```
+
+
 
 ### 👉 catch()
 
+에러 발생 시 설정값을 반환
+
+```ts
+const numberWithCatch = z.number().catch(42);
+
+numberWithCatch.parse(5); // => 5
+numberWithCatch.parse("tuna"); // => 42
+```
+
+
+
 ### 👉 readonly()
+
+읽기 전용
+
+```ts
+const schema = z.object({ name: z.string() }).readonly();
+type schema = z.infer<typeof schema>;
+// Readonly<{name: string}>
+
+const result = schema.parse({ name: "fido" });
+result.name = "simba"; // error
+```
 
 <br/><br/>
 
 ## 🌏 Objects
 
+```ts
+// all properties are required by default
+const Dog = z.object({
+  name: z.string(),
+  age: z.number(),
+});
+
+// extract the inferred type like this
+type Dog = z.infer<typeof Dog>;
+
+// equivalent to:
+type Dog = {
+  name: string;
+  age: number;
+};
+```
+
+### 👉 shape()
+
+특정 키에 대한 스키마에 액세스 하는데 사용
+
+```ts
+Dog.shape.name; // => string schema
+Dog.shape.age; // => number schema
+```
+
+
+
+### 👉 keyof()
+
+객체 스키마의 **키**에서 ZodEnum스키마를 생성함
+
+```ts
+const keySchema = Dog.keyof();
+keySchema; // ZodEnum<["name", "age"]>
+```
+
+
+
+### 👉 extend()
+
+객체 스키마에 필드를 추가
+
+```ts
+const DogWithBreed = Dog.extend({
+  breed: z.string(),
+});
+```
+
+
+
+### 👉 merge()
+
+`A.extend(B.shape)`와 동일
+
+```ts
+const BaseTeacher = z.object({ students: z.array(z.string()) });
+const HasID = z.object({ id: z.string() });
+
+const Teacher = BaseTeacher.merge(HasID);
+type Teacher = z.infer<typeof Teacher>; // => { students: string[], id: string }
+```
+
+❗ 두 스키마가 키를 공유하는 경우 B의 속성이 A속성을 재정의함.
+
+
+
+### 👉 pick() / omit()
+
+UtilityType의 Pick과 Omit에서 영감을 받음
+
+```ts
+const Recipe = z.object({
+  id: z.string(),
+  name: z.string(),
+  ingredients: z.array(z.string()),
+});
+```
+
+Pick
+
+```ts
+const JustTheName = Recipe.pick({ name: true });
+type JustTheName = z.infer<typeof JustTheName>;
+// => { name: string }
+```
+
+Omit
+
+```ts
+const NoIDRecipe = Recipe.omit({ id: true });
+
+type NoIDRecipe = z.infer<typeof NoIDRecipe>;
+// => { name: string, ingredients: string[] }
+```
+
+
+
+### 👉 partial()
+
+모든 속성을 선택사항으로 만듬. (UtilityType Partial)
+
+```ts
+const user = z.object({
+  email: z.string(),
+  username: z.string(),
+});
+// { email: string; username: string }
+```
+
+```ts
+const partialUser = user.partial();
+// { email?: string | undefined; username?: string | undefined }
+```
+
+
+
+### 👉 required()
+
+partial과 달리 모든 속성을 필수로 만듬.
+
+```ts
+const user = z
+  .object({
+    email: z.string(),
+    username: z.string(),
+  })
+  .partial();
+// { email?: string | undefined; username?: string | undefined }
+```
+
+```ts
+const requiredUser = user.required();
+// { email: string; username: string }
+```
+
 <br/><br/>
 
 ## 🌏 Array
 
+### 👉 element
+
+배열 요소의 스키마에 액세스함.
+
+```ts
+stringArray.element; // => string schema
+```
+
+
+
+### 👉nonempty
+
+배열에 요소가 하나 이상 포함되어 있는지 확인할 때 사용.
+
+```ts
+const nonEmptyStrings = z.string().array().nonempty();
+// the inferred type is now
+// [string, ...string[]]
+
+nonEmptyStrings.parse([]); // throws: "Array cannot be empty"
+nonEmptyStrings.parse(["Ariana Grande"]); // passes
+
+
+// optional custom error message
+const nonEmptyStrings = z.string().array().nonempty({
+  message: "Can't be empty!",
+});
+```
+
+
+
+### 👉.min/.max/.length
+
+```ts
+z.string().array().min(5); // must contain 5 or more items
+z.string().array().max(5); // must contain 5 or fewer items
+z.string().array().length(5); // must contain 5 items exactly
+```
+
+
+
 <br/><br/>
 
 ## 🌏 Function
+
+Zod를 이용해 `function schema`도 정의가 가능하다.
+
+validation code와 business logic을 혼합하지 않고도 함수의 입력과 출력을 쉽게 확인할 수 있다.
+
+`z.function(args, returnType)`
+
+```ts
+const myFunction = z.function();
+
+type myFunction = z.infer<typeof myFunction>;
+```
+
+input과 output 정의
+
+```ts
+const myFunction = z
+  .function()
+  .args(z.string(), z.number()) // accepts an arbitrary number of arguments
+  .returns(z.boolean());
+
+type myFunction = z.infer<typeof myFunction>;
+// => (arg0: string, arg1: number)=>boolean
+```
+
+### 👉 implement()
+
+함수의 입력과 출력의 유효성을 자동으로 확인하는 **새 함수를 반환**하는 메서드
+
+```ts
+const trimmedLength = z
+  .function()
+  .args(z.string()) // accepts an arbitrary number of arguments
+  .returns(z.number())
+  .implement((x) => {
+    // TypeScript knows x is a string!
+    return x.trim().length;
+  });
+
+trimmedLength("sandwich"); // => 8
+trimmedLength(" asdf "); // => 4
+```
+
+❗ 입력 유효성 검사에만 관심이 있다면, `return()`메서드를 호출 X
+
+❗ 함수가 아무것도 반환하지 않는 경우 `z.void()`옵션을 사용할 수 있음
+
+```ts
+const myFunction = z
+  .function()
+  .args(z.string())
+  .implement((arg) => {
+    return [arg.length];
+  });
+
+myFunction; // (arg: string)=>number[]
+```
+
+입력 및 출력 스키마를 추출
+
+```ts
+myFunction.parameters();
+// => ZodTuple<[ZodString, ZodNumber]>
+
+myFunction.returnType();
+// => ZodBoolean
+```
 
 <br/><br/>
 

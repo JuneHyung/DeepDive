@@ -1,24 +1,26 @@
 {
   "compilerOptions": {
-    "allowJs": true, // Javascript 파일의 컴파일 허용
-    "allowSyntheticDefaultImports": true, // default export가 없는 모듈에서 default imports를 허용.
-    "baseUrl": ".", // 비-상대적 모듈 이름을 해석하기 위한 기본 디렉터리. 
-    "esModuleInterop": true, 
-    "forceConsistentCasingInFileNames": true, // 동일 파일 참조에 대해 일관성 없는 대소문자를 비활성화합니다.
-    "isolatedModules": true, // 추가 검사를 수행하여 별도의 컴파일이 안전한지 확인.
-    "jsx": "react-jsx", // .tsx에서 JSX 지원.
-    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 컴파일에 포함될 라이브러리 파일 목록
-    "module": "ESNext", // 생성되는 모듈 코드 지정
-    "moduleResolution": "Node", // 모듈 해석방법 설정
-    "paths": { // baseUrl을 기준으로 관련된 위치에 모듈 이름의 경로 매핑 목록을 나열
-      "@/*": ["src/*"]
-    },
-    "resolveJsonModule": true, // .json파일 가져오기를 활성화
-    "skipLibCheck": true, // 모든 선언 파일(*.d.ts)의 타입 검사를 건너뜀
-    "strict": true, // 엄격한 유형 검사 옵션 활성화
-    "target": "ES2020", // 내보낸 JavaScript의 Javascript 언어 버전을 설정하고 호환 가능한 라이브러리 선언을 포함.
-    "useDefineForClassFields": true, // class Field를 ECMAScript표준 시맨틱으로 내보냄
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": ["src", "vite.config.js"],
-  "exclude": ["node_modules", "build", "dist"]
+  "include": [
+    "src"
+  ]
 }

@@ -1,10 +1,10 @@
-import { todoListFilterState } from "@/store/todoAtom";
 import { useRecoilState } from "recoil";
+import { todoListFilterState } from "../store/todo";
 
-const TodoListFilters = () => {
+function TodoListFilters() {
   const [filter, setFilter] = useRecoilState(todoListFilterState);
 
-  const updateFilter = ({ target: { value } }) => {
+  const updateFilter = ({target: {value}}) => {
     setFilter(value);
   };
 
@@ -18,6 +18,6 @@ const TodoListFilters = () => {
       </select>
     </>
   );
-};
+}
 
 export default TodoListFilters;

@@ -1,18 +1,18 @@
-import { atom, selector } from "recoil";
+import {atom, selector} from 'recoil';
 
 export const todoListState = atom({
-  key: "todoListState",
+  key: 'todoListState',
   default: [],
-});
+})
 
 export const todoListFilterState = atom({
-  key: "todoListFilterState",
-  default: "Show All",
+  key: 'todoListFilterState',
+  default: 'Show All',
 });
 
 export const filteredTodoListState = selector({
   key: 'filteredTodoListState',
-  get: ({ get }) => {
+  get: ({get}) => {
     const filter = get(todoListFilterState);
     const list = get(todoListState);
 
@@ -29,7 +29,7 @@ export const filteredTodoListState = selector({
 
 export const todoListStatsState = selector({
   key: 'todoListStatsState',
-  get: ({ get }) => {
+  get: ({get}) => {
     const todoList = get(todoListState);
     const totalNum = todoList.length;
     const totalCompletedNum = todoList.filter((item) => item.isComplete).length;

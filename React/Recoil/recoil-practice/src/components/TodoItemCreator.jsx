@@ -1,13 +1,15 @@
-import { todoListState } from "@/store/todoAtom";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
+import { todoListState } from "../store/todo";
 
+// 고유한 Id 생성을 위한 유틸리티
 let id = 0;
 function getId() {
   return id++;
 }
-const TodoItemCreator = () => {
-  const [inputValue, setInputValue] = useState("");
+
+function TodoItemCreator() {
+  const [inputValue, setInputValue] = useState('');
   const setTodoList = useSetRecoilState(todoListState);
 
   const addItem = () => {
@@ -19,10 +21,10 @@ const TodoItemCreator = () => {
         isComplete: false,
       },
     ]);
-    setInputValue("");
+    setInputValue('');
   };
 
-  const onChange = ({ target: { value } }) => {
+  const onChange = ({target: {value}}) => {
     setInputValue(value);
   };
 
@@ -32,6 +34,6 @@ const TodoItemCreator = () => {
       <button onClick={addItem}>Add</button>
     </div>
   );
-};
+}
 
 export default TodoItemCreator;

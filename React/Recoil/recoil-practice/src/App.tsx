@@ -1,9 +1,13 @@
-import Content from './components/Content';
+import { RecoilRoot } from 'recoil';
+import './App.css';
+import TodoList from './components/TodoList';
 
 function App() {
   return (
-    <div className="app">
-      <Content />
+    <div className="App">
+      <RecoilRoot>
+        <TodoList />
+      </RecoilRoot>
     </div>
   );
 }

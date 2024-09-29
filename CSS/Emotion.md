@@ -683,7 +683,7 @@ Emotino은 임의의 className을 변형하는데 이를 커스터마이징 할 
 
 ### 👉 단점
 
-* **CSS-in-JS는 런타임 오버헤드를 더한다.**<br/>컴포넌트가 렌더링 될 때 `CSS-in-JS`는 document에 삽입할 수 있는 CSS로 스타일을 `직렬화`해야한다.<br/>이런 부분이 CPU를 차지한다는 것이 분명하지만, 앱의 성능에 눈에 띄는 영향을 주는지는 확인해야한다.<br/>(참고 링크를 확인)
+* **CSS-in-JS는 런타임 오버헤드를 더한다.**<br/>컴포넌트가 렌더링 될 때 `CSS-in-JS`는 document에 삽입할 수 있는 CSS로 스타일을 `직렬화`해야한다.<br/>이런 부분이 CPU를 차지한다는 것이 분명하지만, 앱의 성능에 눈에 띄는 영향을 주는지는 확인해야한다.<br/>(소개글에서는 emotion에서 sass로 변경하여 테스트한 결과 평균 `54.3ms` -> `27.7ms`로 48% 감소하였다고 작성됨)
 * **CSS-in-JS는 번들 크기를 늘린다.**<br/>사이트를 방문하는 각 사용자는 CSS-in-JS 라이브러리용 자바스크립트를 다운로드 해야한다.<br/>용량이 크지는 않지만, 추가는 되기 때문에 번들 크기를 늘린다.
 * **CSS-in-JS는 React Devtools를 어지럽힌다.**<br/>각 요소에 대해 Emotion은 `<EmotionCssproInternal>` 및 `<Insertion>`컴포넌트를 렌더링한다.<br/>![css_in_js단점](./images/css_in_js단점.jpg)
 
@@ -695,3 +695,6 @@ Emotino은 임의의 className을 변형하는데 이를 커스터마이징 할 
 
 * [공식문서 - Emotion](https://emotion.sh/docs/introduction)
 * [Medium - 우리가 CSS-in-JS와 헤어지는 이유](https://junghan92.medium.com/번역-우리가-css-in-js와-헤어지는-이유-a2e726d6ace6)
+* [Git Emotion Issue - Emotion의 여러 인스턴스가 한 번에 로드됩니다 ](https://github.com/emotion-js/emotion/issues/2639)
+* [Git Emotion Issue - 컴포넌트 라이브러리는 스타일이 삽입되는 순서를 완전히 제어할 수 없는 경우가 많습니다](https://github.com/emotion-js/emotion/issues/2803)
+* [Git Emotion Issue - SSR지원이 React 17과 18버전에서 다르게 동작됩니다](https://github.com/emotion-js/emotion/issues/2725)

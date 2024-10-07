@@ -40,7 +40,7 @@ export default defineConfig({
 
 ### 👉 경고 메세지 발생
 
-![node-sass warning](./images/node-sass warning.jpg)
+![node-sass warning](./images/node-sass_warning.jpg)
 
 프로젝트 실행시 다음과 같은 Warning Message가 터미널에 출력 되었다.
 
@@ -60,7 +60,7 @@ npm을 이동해본 결과, `node-sass` pacakge가 deprecate되었고, git에서
 
 Node버전에 의존적
 
-![node-sass version](./images/node-sass version.jpg)
+![node-sass version](./images/node-sass_version.jpg)
 
 2024년 7월 24일 `Node Sass is end-of-life` 관련 글이 작성됨.
 

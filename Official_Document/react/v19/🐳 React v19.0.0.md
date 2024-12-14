@@ -16,37 +16,39 @@
 
 ## 🌏 React
 
-- Actions: `startTransition` can now accept async functions. Functions passed to `startTransition` are called “Actions”. A given Transition can include one or more Actions which update state in the background and update the UI with one commit. In addition to updating state, Actions can now perform side effects including async requests, and the Action will wait for the work to finish before finishing the Transition. This feature allows Transitions to include side effects like `fetch()` in the pending state, and provides support for error handling, and optimistic updates.
-- `useActionState`: is a new hook to order Actions inside of a Transition with access to the state of the action, and the pending state. It accepts a reducer that can call Actions, and the initial state used for first render. It also accepts an optional string that is used if the action is passed to a form `action` prop to support progressive enhancement in forms.
-- `useOptimistic`: is a new hook to update state while a Transition is in progress. It returns the state, and a set function that can be called inside a transition to “optimistically” update the state to expected final value immediately while the Transition completes in the background. When the transition finishes, the state is updated to the new value.
-- `use`: is a new API that allows reading resources in render. In React 19, `use` accepts a promise or Context. If provided a promise, `use` will suspend until a value is resolved. `use` can only be used in render but can be called conditionally.
-- `ref` as a prop: Refs can now be used as props, removing the need for `forwardRef`.
-- **Suspense sibling pre-warming**: When a component suspends, React will immediately commit the fallback of the nearest Suspense boundary, without waiting for the entire sibling tree to render. After the fallback commits, React will schedule another render for the suspended siblings to “pre-warm” lazy requests.
+- Actions: `startTransition`에서 이제 비동기 함수를 지원함.  `startTransition`에 전달된 함수는 “Actions”라 불립니다. 하나의 Transition은 하나 이상의 Action을 포함할 수 이으며, 이는 백그라운드에서 상태를 업데이트하고 단일 커밋으로 UI를 개선합니다. Action은 상태업데이트할 뿐만 아니라, 비동기요청(fetch())등과 같은 side effect들도 수행할 수 있으며, Transition이 완료되기 전에 해당 작업이 끝날때 까지 기다립니다. 이 기능은 Transition의 pending상태에 `fetch()`같은  side effect를 포함할 수 있도록 하며, 에러 처리와 optimistic update를 지원합니다.
+- `useActionState`: action state 및 pending상태에 액세스하여 transition 내부에서 action을 주문하는 새로운 hook이다. 이 hook은 Action을 호출할 수 있는 reducer와 초기 렌더링에 사용되는 초기 state를 허용합니다. 또한 양식의 점진적인 향상을 지원하기 위해 action이 form `action` props에 전달되는 경우 사용되는 선택적 문자열을 허용합니다.
+- `useOptimistic`: Transition이 진행되는 동안 state를 업데이트 하는 새로운 hook. state와 transition이 백그라운드에서 완료되는 동안 state를 예상되는 최종값으로 즉시 "optimistically" 업데이트하기 위해 transition내에서 호추랗ㄹ 수 이는 설정 함수를 반환합니다. transition이 완료되면 state가 새 값으로 업데이트 됩니다.
+- `use`: 렌링에서 리소스를 읽을 수 있는 새로운 API입니다. React18에서 `use`는 promise나 context를 허용합니다. Promise가 제공되면 `use`는 값이 해결될때 까지 일시 중지(suspend) 됩니다. `use`는 렌더링에만 사용할 수 있지만 조건부로 호출할 수 있습니다.
+- `ref` as a prop: 이제 `ref`를 props로 사용할 수 있어, `forwardRef`를 사용할 필요가 없습니다.
+- **Suspense sibling pre-warming**: 컴포넌트가 일시 중단(suspend)될 때, React는 전체 형제 트리가 렌더링될 때까지 기다리지 않고 가장 가까운 Suspense경계의 fallback을 즉시 커밋합니다. fallback커밋이 완료된 후 React는 일시 중지 된 형제에 대한 또다른 렌더링을 예약하여 lazy Request를 "pre-warm"합니다.
+
+<br/><br/>
 
 ## 🌏 React DOM Client
 
-- `<form> action` prop: Form Actions allow you to manage forms automatically and integrate with `useFormStatus`. When a `<form> action` succeeds, React will automatically reset the form for uncontrolled components. The form can be reset manually with the new `requestFormReset` API.
-- `<button> and <input> formAction` prop: Actions can be passed to the `formAction` prop to configure form submission behavior. This allows using different Actions depending on the input.
-- `useFormStatus`: is a new hook that provides the status of the parent `<form> action`, as if the form was a Context provider. The hook returns the values: `pending`, `data`, `method`, and `action`.
-- Support for Document Metadata: We’ve added support for rendering document metadata tags in components natively. React will automatically hoist them into the `<head>` section of the document.
-- Support for Stylesheets: React 19 will ensure stylesheets are inserted into the `<head>` on the client before revealing the content of a Suspense boundary that depends on that stylesheet.
-- Support for async scripts: Async scripts can be rendered anywhere in the component tree and React will handle ordering and deduplication.
-- Support for preloading resources: React 19 ships with `preinit`, `preload`, `prefetchDNS`, and `preconnect` APIs to optimize initial page loads by moving discovery of additional resources like fonts out of stylesheet loading. They can also be used to prefetch resources used by an anticipated navigation.
+- `<form> action` prop: Form Actions을 사용하려면 From을 자동으로 관리하고 `useFormStatus`와 통합할 수 있습니다. `<form action>`이 성공하면, React는 uncontrolled 컴포넌트들에 대한 From을 자동으로 재설정합니다. 새로운 `requestFormReset`API를 사용해 Form을 수동으로 재설정할 수 있습니다.
+- `<button> and <input> formAction` prop: From제출 동작을 구성하기위해 `formAction` prop에 Action을 전달할 수 있습니다. 이를 통해 입력에 따라 다른 Action을 사용할 수 있습니다.
+- `useFormStatus`: form이 context 공급자인 것처럼 상위 `<from> action`의 상태를 제공하는 새로운 hook입니다. hook은 `pending`, `data`, `method`, and `action`값을 반환합니다.
+- Support for Document Metadata: 기본적으로 컴포넌트에 메타 데이터 태그를 렌더링하기 위한 지원이 추가되었습니다. React는 이를 문서의 `<head>`section에 끌어올립니다.
+- Support for Stylesheets: React19는 스타일시트에 의존하는 Suspense boundary의 내용을 공개하기 전에 클라이언트의 `<head>`에 스타일 시트가 삽입되도록 합니다.
+- Support for async scripts: 비동기 스크립트는 컴포넌트 트리의 어느곳에서나 렌더리오딜 수 있으며 React는 순서지정 및 중복제거를 처리합니다.
+- Support for preloading resources: React19에는 `preinit`, `preload`, `prefetchDNS`, and `preconnect` APIs가 포함되어 스타일시트 로딩에서 글꼴과 같은 추가 리소스 검색을 이동하여 초기 페이지 로드를 최적화합니다. 도한 예상 탐색에 사용되는 리소스를 미리 가져오는데 사용될 수도 있습니다.
 
 ## 🌏 React DOM Server
 
-- Added `prerender` and `prerenderToNodeStream` APIs for static site generation. They are designed to work with streaming environments like Node.js Streams and Web Streams. Unlike `renderToString`, they wait for data to load for HTML generation.
+- 정적 사이트 생성을 위해 `prerender`및 `prerenderToNodeStream` API를 추가했습니다. Node.js Streams및 Web Streams와 같은 스트리밍 환경에서 작동하도록 설계 되었습니다. `rendrToString`과 달리 HTML생성을 위해 데이터가 로드될때 까지 기다립니다.
 
 ## 🌏 React Server Components
 
-- RSC features such as directives, server components, and server functions are now stable. This means libraries that ship with Server Components can now target React 19 as a peer dependency with a react-server export condition for use in frameworks that support the Full-stack React Architecture. The underlying APIs used to implement a React Server Components bundler or framework do not follow semver and may break between minors in React 19.x. See [docs](https://19.react.dev/reference/rsc/server-components) for how to support React Server Components.
+- 지시어, 서버 컴포넌트들, 그리고 서버 function들 같은 RSC 기능은 이제 안정적입니다. 이는 서버 컴포넌트와 함께 제공되는 라이브러리가 이제 Server 컴포넌트와 함께 제공되는 라이브러리가 이제 Full-Stack React 아키택처를 지원하는 프레임워크에서 사용하기 위해 react-server export condition을 사용하여 peer dependency로 React19를 대상으로 할 수 있음을 의미합니다. React Server 컴포넌트 번들러 또는 프레임워크를 구현하는 데 사용되는 기본 API는 semver을 따르지 않으며 React19.x ~ 마이너 사이에서 중단될 수 있습니다. <br/>React 서버 컴포넌트를 지원하는 방법은 [docs](https://19.react.dev/reference/rsc/server-components)를 참고하세요.
 
 <br/><br/>
 
 # 🐳 Deprecations
 
-- Deprecated: `element.ref` access: React 19 supports ref as a prop, so we’re deprecating `element.ref` in favor of `element.props.ref`. Accessing will result in a warning.
-- `react-test-renderer`: In React 19, react-test-renderer logs a deprecation warning and has switched to concurrent rendering for web usage. We recommend migrating your tests to @testinglibrary.com/docs/react-testing-library/intro/) or @testingesting-library.com/docs/react-native-testing-library/intro)
+- Deprecated: `element.ref` access: React 19는 ref를 prop으로 지원하기 때문에 `element.ref`를 더 이상 사용하지 않고, `element.props.ref`를 선호합니다. 접근시에 경고가 발생합니다.
+- `react-test-renderer`: React 19에서 React-test-renderer는 지원 중단 경고를 기록하고 웹 사용을 위한 동시 렌더링으로 전환했습니다. 테스트를 @testinglibrary.com/docs/react-testing-library/intro/) or @testingesting-library.com/docs/react-native-testing-library/intro)로 마이그레이션하는 것을 추천합니다.
 
 <br/><br/>
 

@@ -24,66 +24,68 @@ const {
 
 **Options**
 
-The options for useInfiniteQuery are identical to the [useQuery hook](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) with the addition of the following:
+`useQuery`의 옵션과 동일하며, 아래 옵션들이 추가됨.
 
-- queryFn: (context: QueryFunctionContext) => Promise<TData>
-  - **Required, but only if no default query function has been defined** [defaultQueryFn](https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function)
-  - The function that the query will use to request data.
-  - Receives a [QueryFunctionContext](https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#queryfunctioncontext)
-  - Must return a promise that will either resolve data or throw an error.
-- initialPageParam: TPageParam
-  - **Required**
-  - The default page param to use when fetching the first page.
-- getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => TPageParam | undefined | null
-  - **Required**
-  - When new data is received for this query, this function receives both the last page of the infinite list of data and the full array of all pages, as well as pageParam information.
-  - It should return a **single variable** that will be passed as the last optional parameter to your query function.
-  - Return undefined or null to indicate there is no next page available.
-- getPreviousPageParam: (firstPage, allPages, firstPageParam, allPageParams) => TPageParam | undefined | null
-  - When new data is received for this query, this function receives both the first page of the infinite list of data and the full array of all pages, as well as pageParam information.
-  - It should return a **single variable** that will be passed as the last optional parameter to your query function.
-  - Return undefined or nullto indicate there is no previous page available.
-- maxPages: number | undefined
-  - The maximum number of pages to store in the infinite query data.
-  - When the maximum number of pages is reached, fetching a new page will result in the removal of either the first or last page from the pages array, depending on the specified direction.
-  - If undefined or equals 0, the number of pages is unlimited
-  - Default value is undefined
-  - getNextPageParam and getPreviousPageParam must be properly defined if maxPages value is greater than 0 to allow fetching a page in both directions when needed.
+- `queryFn: (context: QueryFunctionContext) => Promise<TData>`
+  - 필수 (단, 기본 쿼리 함수가 정의되지 않은 경우에만 필수)
+  - 쿼리가 ㅔ이터를 요청하는데 사용할 함수
+  - `QueryFunctionContext`를 인자로 받음
+  - 데이터를 반환하거나 오류를 발생시키는 Promise를 반환해야함.
+- `initialPageParam: TPageParam`
+  - **필수**
+  - 첫 페이지를 가져올 때 사용할 기본 페이지 매개변수
+- `getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => TPageParam | undefined | null`
+  - **필수**
+  - 새 데이터를 받을 때 마지막 페이지 및 전체 페이지 배열과 페이지 매개변수 정보를 받음.
+  - 반환된 ㄱ밧은 쿼리 함수의 마지막 매개변수로 전달됨.
+  - `undefined`또는 `null`을 반환하면 다음 페이지가 없음을 의미함.
+- `getPreviousPageParam: (firstPage, allPages, firstPageParam, allPageParams) => TPageParam | undefined | null`
+  - 새 데이터를 받을 때 첫 번째 페이지 및 전체 페이지 배여로가 페이지 매개변수 정보를 받음
+  - 반환된 값은 쿼리 함수의 마지막 매개변수로 전달됨
+  - `undefined`또는 `null`을 반환하면 이전 페이지가 없음을 의미
+- `maxPages: number | undefined`
+  - 저장할 최대 페이지 수를 설정함
+  - 최대 페이지 수에 도달하면 새로운 페이지를 가져올 때 첫 번째 또는 마지막 페이지가 제거됨
+  - 기본값은 `undefined`
+  - `maxPages`값이 0보다 큰 경우, `getNextPageparam`및 `getPreviousPageParam`이 적절히 정의되있어야 함.
 
 **Returns**
 
-The returned properties for useInfiniteQuery are identical to the [useQuery hook](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery), with the addition of the following properties and a small difference in isRefetching and isRefetchError:
+반환 속성도 `useQuery`와 동일하지만, 아래 속성이 추가되거나 변경됨.ㅁㅁㅁㅁㅁㅁㅁㅁ
 
-- data.pages: TData[]
-  - Array containing all pages.
-- data.pageParams: unknown[]
-  - Array containing all page params.
-- isFetchingNextPage: boolean
-  - Will be true while fetching the next page with fetchNextPage.
-- isFetchingPreviousPage: boolean
-  - Will be true while fetching the previous page with fetchPreviousPage.
-- fetchNextPage: (options?: FetchNextPageOptions) => Promise<UseInfiniteQueryResult>
-  - This function allows you to fetch the next "page" of results.
-  - options.cancelRefetch: boolean if set to true, calling fetchNextPage repeatedly will invoke queryFn every time, whether the previous invocation has resolved or not. Also, the result from previous invocations will be ignored. If set to false, calling fetchNextPage repeatedly won't have any effect until the first invocation has resolved. Default is true.
-- fetchPreviousPage: (options?: FetchPreviousPageOptions) => Promise<UseInfiniteQueryResult>
-  - This function allows you to fetch the previous "page" of results.
-  - options.cancelRefetch: boolean same as for fetchNextPage.
-- hasNextPage: boolean
-  - Will be true if there is a next page to be fetched (known via the getNextPageParam option).
-- hasPreviousPage: boolean
-  - Will be true if there is a previous page to be fetched (known via the getPreviousPageParam option).
-- isFetchNextPageError: boolean
-  - Will be true if the query failed while fetching the next page.
-- isFetchPreviousPageError: boolean
-  - Will be true if the query failed while fetching the previous page.
-- isRefetching: boolean
-  - Will be true whenever a background refetch is in-flight, which *does not* include initial pending or fetching of next or previous page
-  - Is the same as isFetching && !isPending && !isFetchingNextPage && !isFetchingPreviousPage
-- isRefetchError: boolean
-  - Will be true if the query failed while refetching a page.
-- promise: Promise<TData>
-  - A stable promise that resolves to the query result.
-  - This can be used with React.use() to fetch data
-  - Requires the experimental_prefetchInRender feature flag to be enabled on the QueryClient.
+- `data.pages: TData[]`
+  - 모든 페이지를 포함하는 배열
+- `data.pageParams: unknown[]`
+  - 모든 페이지 매개변수를 포함하는 배열
+- `isFetchingNextPage: boolean`
+  - `fetchNextpage`를 호출하여 다음 페이지를 가져오는 동안 `true`가 됨.
+- `isFetchingPreviousPage: boolean`
+  - `fetchPreviousPage`를 호출해 이전 페이지를 가져오는 동안 `true`가 됨
+- `fetchNextPage: (options?: FetchNextPageOptions) => Promise<UseInfiniteQueryResult>`
+  - 다음 페이지의 결과를 가져오는 함수
+  - `options.cancelRefetch`: `true`로 설정하면 `fetchNextPage`를 여러 번 호출해도 이전 요청이 완료되지 않은 경우 기존 요청을 무시하고 새 요청을 수행함. <br/>false로 설정하면 이전 요청이 완료될 때 까지 새 요청을 실행하지 않고, 기본값은 `true`
+- `fetchPreviousPage: (options?: FetchPreviousPageOptions) => Promise<UseInfiniteQueryResult>`
+  - 이전 페이지의 결과를 가져오는 함수
+  - `options.cancelRefetch`: `fetchNextpage`와 동일한 동작함
+- `hasNextPage: boolean`
+  - `getNextPageParam`에 의해 다음 페이지가 있을 경우 `true`
+- `hasPreviousPage: boolean`
+  - `getPreviousPageParam`에 의해 이전 페이지가 있을 경우 `true`
+- `isFetchNextPageError: boolean`
+  - 다음 페이지를 가져오는 동안 쿼리에 실패하면 `true`
+- `isFetchPreviousPageError: boolean`
+  - 이전 페이지를 가져오는 동안 쿼리에 실패하면 `true`
+- `isRefetching: boolean`
+  - 백그라운드에서 다시 가져오는 동안 `true`가 됨.
+  - 초기 로딩 및 `fetchNextPage`, `fetchPreviousPage`와는 별개
+  - `isFetching && !isPending && !isFetchingNextpage && !isFetchingPreviousPage`와 동일한 동작
+- `isRefetchError: boolean`
+  - 다시 가져오는 동안 쿼리에 실패하면 `true`
+- `promise: Promise<TData>`
+  - 쿼리 결과를 반환하는 안정적인 Promise
+  - React.use()와 함께 사용할 수 있음.
+  - `experimental_prefetchInRender`기능 플래그가 활성화된 경우에만 사용가능
 
-Keep in mind that imperative fetch calls, such as fetchNextPage, may interfere with the default refetch behaviour, resulting in outdated data. Make sure to call these functions only in response to user actions, or add conditions like hasNextPage && !isFetching.
+사용자 동작과 관련이 없는 경우, `fetchNextPage`와 같은 함수를 임의로 호출하면 기본적인 refetch동작을 방해할 수 있으며, 오래된 데이터를 불러올 위험이 있음.
+
+이러한 함수를 호출 할 때는 `hasNextPage && !isFetching`같은 조건을 추가하는 것이 좋음
